@@ -105,7 +105,7 @@ self.captureSession = [[AVCaptureSession alloc] init];
 AVCaptureDevice *videoDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
 self.videoInputDevice = [AVCaptureDeviceInput deviceInputWithDevice:videoDevice error:&error];
 if ([self.captureSession canAddInput:self.videoInputDevice]) {
-	[self.captureSession addInput:self.videoInputDevice];
+    [self.captureSession addInput:self.videoInputDevice];
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -117,7 +117,9 @@ self.previewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.cap
 
 После всех приготовлений запускаем сессию
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 [self.captureSession startRunning];
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Логика записи видеофайлов вынесена в отдельный класс VRSVideoWritter. Его
 описание:
@@ -149,7 +151,7 @@ self.previewLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.cap
 self.movieFileOutput = [[AVCaptureMovieFileOutput alloc] init];
 [self.captureSession beginConfiguration];
 if ([self.captureSession canAddOutput:self.movieFileOutput]) {
-	[self.captureSession addOutput:self.movieFileOutput];
+    [self.captureSession addOutput:self.movieFileOutput];
 }
 self.videoOrientation = UIInterfaceOrientationLandscapeRight;
 [self.captureSession commitConfiguration];
@@ -164,6 +166,4 @@ self.videoOrientation = UIInterfaceOrientationLandscapeRight;
 Хотя был представлен не полный код, а только ключевые моменты, но все же его не
 так много. Он демонстрирует простоту работы с AVFoundation и в тоже время ее
 гибкость и возможности. Код взят с нашего семпла VideoRecordSample, котрый можно
-найти на GitHub по ссылке
-[https://github.com/iQueSoft/iOSDemo\_VideoRecord](<https://github.com/iQueSoft/iOSDemo_VideoRecord>)
-.
+найти на GitHub по ссылке <https://github.com/iQueSoft/iOSDemo_VideoRecord> .
