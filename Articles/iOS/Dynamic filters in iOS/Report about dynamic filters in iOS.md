@@ -1,3 +1,9 @@
+*Статья про внедрение технологии OpenGL в обработку видео в iOS приложении.
+Знакомство с открытой библиотекой GPUImage и её использовании на примере
+семпла.*
+
+ 
+
 Довольно часто в мобильных приложениях встречается фича – запись видео. В
 предыдущей статье мы разобрались, что записать видео не так уж и сложно в iOS.
 Но это просто запись видео. А что если этого мало? Что если можно сделать что-то
@@ -79,11 +85,11 @@ Swift.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 init(previewView:GPUImageView, orientation:UIInterfaceOrientation) {
-	super.init()
-	self.previewView = previewView
-	self.videoCamera = GPUImageVideoCamera(sessionPreset: AVCaptureSessionPreset1280x720, cameraPosition: .Back)
-	self.videoCamera.outputImageOrientation = orientation
-	self.videoCamera.startCameraCapture()
+    super.init()
+    self.previewView = previewView
+    self.videoCamera = GPUImageVideoCamera(sessionPreset: AVCaptureSessionPreset1280x720, cameraPosition: .Back)
+    self.videoCamera.outputImageOrientation = orientation
+    self.videoCamera.startCameraCapture()
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -91,21 +97,21 @@ init(previewView:GPUImageView, orientation:UIInterfaceOrientation) {
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 private func updateFilter(filter:GPUImageFilter?) {
-	self.videoCamera.removeAllTargets()
-	if (self.filtersGroup != nil) {
-		self.filtersGroup.removeAllTargets()
-		self.filtersGroup = nil
-	}
-	if (filter == nil) {
-		self.videoCamera.addTarget(self.previewView)
-		return
-	}
-	self.filtersGroup = GPUImageFilterGroup()
-	self.filtersGroup.addFilter(filter!)
-	self.filtersGroup.initialFilters = [filter!]
-	self.filtersGroup.terminalFilter = filter!
-	self.filtersGroup.addTarget(self.previewView)
-	self.videoCamera.addTarget(self.filtersGroup)
+    self.videoCamera.removeAllTargets()
+    if (self.filtersGroup != nil) {
+        self.filtersGroup.removeAllTargets()
+        self.filtersGroup = nil
+    }
+    if (filter == nil) {
+        self.videoCamera.addTarget(self.previewView)
+        return
+    }
+    self.filtersGroup = GPUImageFilterGroup()
+    self.filtersGroup.addFilter(filter!)
+    self.filtersGroup.initialFilters = [filter!]
+    self.filtersGroup.terminalFilter = filter!
+    self.filtersGroup.addTarget(self.previewView)
+    self.videoCamera.addTarget(self.filtersGroup)
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -113,19 +119,19 @@ private func updateFilter(filter:GPUImageFilter?) {
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 func filterForType(filterType:FRSFilter) -> GPUImageFilter? {
-	switch (filterType) {
+    switch (filterType) {
 
-		…
+        …
 
-		case .Grayscale:
-		return GPUImageGrayscaleFilter()
+        case .Grayscale:
+        return GPUImageGrayscaleFilter()
 
-		…
+        …
 
-		default:
-			break
-	}
-	return nil
+        default:
+            break
+    }
+    return nil
 
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -134,20 +140,20 @@ func filterForType(filterType:FRSFilter) -> GPUImageFilter? {
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 func startRecord() {
-	self.isRecorded = true
-	let url: NSURL? = FRSFileManager().urlForVideo()
-	FRSFileManager().removeFile(self.currentVideoURL)
-	self.currentVideoURL = url
-	self.movieWriter = GPUImageMovieWriter(movieURL: url, size: CGSizeMake(1200, 720))
-	self.videoCamera.audioEncodingTarget = self.movieWriter
-	if (self.filtersGroup != nil) {
-		self.filtersGroup.addTarget(self.movieWriter)
-	} else {
-		self.videoCamera.addTarget(self.movieWriter)
+    self.isRecorded = true
+    let url: NSURL? = FRSFileManager().urlForVideo()
+    FRSFileManager().removeFile(self.currentVideoURL)
+    self.currentVideoURL = url
+    self.movieWriter = GPUImageMovieWriter(movieURL: url, size: CGSizeMake(1200, 720))
+    self.videoCamera.audioEncodingTarget = self.movieWriter
+    if (self.filtersGroup != nil) {
+        self.filtersGroup.addTarget(self.movieWriter)
+    } else {
+        self.videoCamera.addTarget(self.movieWriter)
 
-	}
-	self.movieWriter.startRecording()
-	self.startRecordTimer()
+    }
+    self.movieWriter.startRecording()
+    self.startRecordTimer()
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

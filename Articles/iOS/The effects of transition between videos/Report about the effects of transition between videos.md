@@ -1,3 +1,8 @@
+*Знакомство с расширенными возможностями iOS по обработке видео на примере
+стандартного семпла AVCustomEdit. А также, пример расширения этого семпла.*
+
+ 
+
 В этой статье хочу представить очень интересный семпл AVCustomEdit, который
 предоставляет нам Apple (ссылка
 <https://developer.apple.com/library/ios/samplecode/AVCustomEdit/Introduction/Intro.html#//apple_ref/doc/uid/DTS40013411-Intro-DontLinkElementID_2>
@@ -85,13 +90,13 @@ ALPDiagonalWipeCompositor различаются тем, что инициали
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - (NSDictionary *)sourcePixelBufferAttributes
 {
-	return @{ (NSString *)kCVPixelBufferPixelFormatTypeKey : [NSNumber numberWithUnsignedInt:kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange],
+    return @{ (NSString *)kCVPixelBufferPixelFormatTypeKey : [NSNumber numberWithUnsignedInt:kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange],
 (NSString*)kCVPixelBufferOpenGLESCompatibilityKey : [NSNumber numberWithBool:YES]};
 }
 
 - (NSDictionary *)requiredPixelBufferAttributesForRenderContext
 {
-	return @{ (NSString *)kCVPixelBufferPixelFormatTypeKey : [NSNumber numberWithUnsignedInt:kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange],
+    return @{ (NSString *)kCVPixelBufferPixelFormatTypeKey : [NSNumber numberWithUnsignedInt:kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange],
 (NSString*)kCVPixelBufferOpenGLESCompatibilityKey : [NSNumber numberWithBool:YES]};
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -101,10 +106,10 @@ ALPDiagonalWipeCompositor различаются тем, что инициали
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - (void)renderContextChanged:(AVVideoCompositionRenderContext *)newRenderContext
 {
-	dispatch_sync(_renderContextQueue, ^() {
-		_renderContext = newRenderContext;
-		_renderContextDidChange = YES;
-	});
+    dispatch_sync(_renderContextQueue, ^() {
+        _renderContext = newRenderContext;
+        _renderContextDidChange = YES;
+    });
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -113,25 +118,25 @@ ALPDiagonalWipeCompositor различаются тем, что инициали
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - (void)startVideoCompositionRequest:(AVAsynchronousVideoCompositionRequest *)request
 {
-	@autoreleasepool {
-		dispatch_async(_renderingQueue,^() {
-			// Check if all pending requests have been cancelled
-			if (_shouldCancelAllRequests) {
-				[request finishCancelledRequest];
-			} else {
-				NSError *err = nil;
-				// Get the next rendererd pixel buffer
-				CVPixelBufferRef resultPixels = [self newRenderedPixelBufferForRequest:request error:&err];
-				if (resultPixels) {
-					// The resulting pixelbuffer from OpenGL renderer is passed along to the request
-					[request finishWithComposedVideoFrame:resultPixels];
-					CFRelease(resultPixels);
-				} else {
-					[request finishWithError:err];
-				}
-			}
-		});
-	}
+    @autoreleasepool {
+        dispatch_async(_renderingQueue,^() {
+            // Check if all pending requests have been cancelled
+            if (_shouldCancelAllRequests) {
+                [request finishCancelledRequest];
+            } else {
+                NSError *err = nil;
+                // Get the next rendererd pixel buffer
+                CVPixelBufferRef resultPixels = [self newRenderedPixelBufferForRequest:request error:&err];
+                if (resultPixels) {
+                    // The resulting pixelbuffer from OpenGL renderer is passed along to the request
+                    [request finishWithComposedVideoFrame:resultPixels];
+                    CFRelease(resultPixels);
+                } else {
+                    [request finishWithError:err];
+                }
+            }
+        });
+    }
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -142,21 +147,21 @@ ALPDiagonalWipeCompositor различаются тем, что инициали
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -(CVPixelBufferRef)newRenderedPixelBufferForRequest:(AVAsynchronousVideoCompositionRequest *)request error:(NSError **)errOut
 {
-	CVPixelBufferRef dstPixels = nil;
+    CVPixelBufferRef dstPixels = nil;
 
-	...
+    ...
 
-	// Source pixel buffers are used as inputs while rendering the transition
-	CVPixelBufferRef foregroundSourceBuffer = [request sourceFrameByTrackID:currentInstruction.foregroundTrackID];
-	CVPixelBufferRef backgroundSourceBuffer = [request sourceFrameByTrackID:currentInstruction.backgroundTrackID];
-	// Destination pixel buffer into which we render the output
-	dstPixels = [_renderContext newPixelBuffer];
+    // Source pixel buffers are used as inputs while rendering the transition
+    CVPixelBufferRef foregroundSourceBuffer = [request sourceFrameByTrackID:currentInstruction.foregroundTrackID];
+    CVPixelBufferRef backgroundSourceBuffer = [request sourceFrameByTrackID:currentInstruction.backgroundTrackID];
+    // Destination pixel buffer into which we render the output
+    dstPixels = [_renderContext newPixelBuffer];
 
-	...
+    ...
 
-	[_oglRenderer renderPixelBuffer:dstPixels usingForegroundSourceBuffer:foregroundSourceBuffer andBackgroundSourceBuffer:backgroundSourceBuffer forTweenFactor:tweenFactor];
+    [_oglRenderer renderPixelBuffer:dstPixels usingForegroundSourceBuffer:foregroundSourceBuffer andBackgroundSourceBuffer:backgroundSourceBuffer forTweenFactor:tweenFactor];
 
-	return dstPixels;
+    return dstPixels;
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -168,7 +173,7 @@ ALPDiagonalWipeCompositor различаются тем, что инициали
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - (void)renderPixelBuffer:(CVPixelBufferRef)destinationPixelBuffer usingForegroundSourceBuffer:(CVPixelBufferRef)foregroundPixelBuffer andBackgroundSourceBuffer:(CVPixelBufferRef)backgroundPixelBuffer forTweenFactor:(float)tween
 {
-	[self doesNotRecognizeSelector:_cmd];
+    [self doesNotRecognizeSelector:_cmd];
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -184,13 +189,13 @@ ALPDiagonalWipeCompositor различаются тем, что инициали
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - (NSDictionary *)sourcePixelBufferAttributes
 {
-	return @{ (NSString *)kCVPixelBufferPixelFormatTypeKey : [NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA],
+    return @{ (NSString *)kCVPixelBufferPixelFormatTypeKey : [NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA],
 (NSString*)kCVPixelBufferOpenGLESCompatibilityKey : [NSNumber numberWithBool:YES]};
 }
 
 - (NSDictionary *)requiredPixelBufferAttributesForRenderContext
 {
-	return @{ (NSString *)kCVPixelBufferPixelFormatTypeKey : [NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA],
+    return @{ (NSString *)kCVPixelBufferPixelFormatTypeKey : [NSNumber numberWithUnsignedInt:kCVPixelFormatType_32BGRA],
 (NSString*)kCVPixelBufferOpenGLESCompatibilityKey : [NSNumber numberWithBool:YES]};
 }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
